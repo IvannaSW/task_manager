@@ -1,0 +1,13 @@
+.divider {
+  border: 0;
+  border-top: 1px solid #17a2b8;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+}
+
+.list-group-item-action :hover {
+  color: #17a2b8 !important;
+}

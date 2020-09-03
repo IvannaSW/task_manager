@@ -1,0 +1,23 @@
+.app {
+    display: flex;
+    flex-direction: row;
+    width: 1024px;
+    margin: 0 auto;
+}
+
+.app-header {
+    height: 50px;
+    padding: 5px;
+    background-color: #17a2b8;    
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header-tagline {
+    font-size: 18px;
+    color: #fff;
+    line-height: 50px;
+    padding-left: 25px;
+}
+  
