@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { get } from "./api";
-import AppDrawer from "../src/components/AppDrawer/index";
-import AppContent from "../src/components/AppContent/index";
+import AppDrawer from "./components/AppDrawer/index";
+import AppContent from "./components/AppContent/index";
 import "./App.css";
 import { Container, Row, Col } from "react-bootstrap";
 import { Switch, Route } from "react-router-dom";
-import TodoList from "./components/TodoList/index";
 import DBContext from "./context/db";
+import TodoListContainer from "./containers/TodoListContainer";
+import * as api from "./api";
 
 function App() {
   const [lists, setLists] = useState([]);
   useEffect(() => {
-    get("lists")().then(setLists);
+    api.getLists().then(setLists);
   }, []);
   return (
-    <DBContext.Provider value={{ lists, get }}>
-      <div className={"app"}>
+    <DBContext.Provider value={{ lists, ...api }}>
+      <div className="app">
         <Container>
           <Row>
             <Col>
-              <header className={"app-header"}>
-                <div className={"header-tagline"}>Task Manager</div>
+              <header className="app-header">
+                <div className="header-tagline">Task Manager</div>
               </header>
             </Col>
           </Row>
@@ -31,7 +31,7 @@ function App() {
             <Col lg={8}>
               <AppContent>
                 <Switch>
-                  <Route path="/:listId" component={TodoList} />
+                  <Route path="/:listId" component={TodoListContainer} />
                 </Switch>
               </AppContent>
             </Col>
