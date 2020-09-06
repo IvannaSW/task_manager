@@ -28,6 +28,12 @@ const useApi = () => {
       .then((todoId) => setTodos([...todos.filter((t) => t.id !== todoId)]));
   };
 
+  const updateTodo = (todoId, data) => {
+    return api.updateTodo(todoId, data).then((data) => {
+      setTodos([...todos.map(t => t.id === todoId ? ({...t, ...data}) : t) ])
+    })
+  }
+
   return {
     data: {
       lists,
@@ -38,6 +44,7 @@ const useApi = () => {
       getListTodos,
       createTodo,
       deleteTodo,
+      updateTodo
     },
   };
 };

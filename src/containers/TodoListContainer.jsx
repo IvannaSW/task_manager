@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
-
 import useApi from "../hooks/apiHook";
-
 import { Spinner } from "react-bootstrap";
-
 import TodoList from "../components/TodoList/index";
 import TodoForm from "../components/TodoForm";
 
@@ -19,7 +16,7 @@ const TodoListContainer = ({ match }) => {
   if (!list || !todos) {
     return <Spinner animation="border" variant="info" className={"spinner"} />;
   }
-  const onAddNewTask = (title) => {
+  const handleAddTask = (title) => {
     actions.createTodo({ title, listId: list.id });
   };
 
@@ -27,10 +24,14 @@ const TodoListContainer = ({ match }) => {
     actions.deleteTodo(todoId);
   };
 
+  const handleUpdate = (todoId, data) => {
+    actions.updateTodo(todoId, data);
+  };
+
   return (
     <div className="todoListContainer">
-      <TodoList todos={todos} list={list} onDelete={handleDelete} />
-      <TodoForm onSubmit={onAddNewTask} />
+      <TodoList todos={todos} list={list} onDelete={handleDelete} onUpdate={handleUpdate} />
+      <TodoForm onSubmit={handleAddTask} />
     </div>
   );
 };

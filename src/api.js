@@ -53,3 +53,11 @@ export const deleteTodo = (todoId) => {
     .delete()
     .then(() => todoId);
 };
+
+export const updateTodo = (todoId, data) => {
+  return db
+    .collection("todos")
+    .doc(todoId)
+    .update(data)
+    .then((res) => console.log(res));
+};

@@ -3,7 +3,10 @@ import { ListGroup, FormCheck } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import "./TodoListItem.css";
 
-const TodoListItem = ({ todo, onCompleteChange, onDelete }) => {
+const TodoListItem = ({ todo, onUpdate, onDelete }) => {
+  const handleChange = ({ target: { checked } }) => { 
+    onUpdate(todo.id, {completed: checked});
+  }
   return (
     <ListGroup variant="flush">
       <ListGroup.Item>
@@ -12,7 +15,7 @@ const TodoListItem = ({ todo, onCompleteChange, onDelete }) => {
           variant="info"
           type="checkbox"
           checked={todo.completed}
-          onChange={onCompleteChange}
+          onChange={handleChange}
         />
         {todo.title}
         <div className="delete-button-container" onClick={() => onDelete(todo.id)}>
