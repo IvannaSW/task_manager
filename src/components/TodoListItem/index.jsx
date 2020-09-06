@@ -3,13 +3,13 @@ import { ListGroup, FormCheck } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import "./TodoListItem.css";
 
-const TodoListItem = ({ todo, onUpdate, onDelete }) => {
-  const handleChange = ({ target: { checked } }) => { 
-    onUpdate(todo.id, {completed: checked});
-  }
+const TodoListItem = ({ todo, onUpdate, onDelete, onSelect }) => {
+  const handleChange = ({ target: { checked } }) => {
+    onUpdate(todo.id, { completed: checked });
+  };
   return (
     <ListGroup variant="flush">
-      <ListGroup.Item>
+      <ListGroup.Item className="item-container">
         <FormCheck
           inline
           variant="info"
@@ -17,8 +17,14 @@ const TodoListItem = ({ todo, onUpdate, onDelete }) => {
           checked={todo.completed}
           onChange={handleChange}
         />
-        {todo.title}
-        <div className="delete-button-container" onClick={() => onDelete(todo.id)}>
+
+        <span onClick={() => onSelect(todo)} className="selected-item">
+          {todo.title}
+        </span>
+        <div
+          className="delete-button-container"
+          onClick={() => onDelete(todo.id)}
+        >
           <Trash className="delete-button" />
         </div>
       </ListGroup.Item>

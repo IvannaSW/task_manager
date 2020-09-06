@@ -24,10 +24,10 @@ function App() {
           </Col>
         </Row>
         <Row>
-          <Col lg={4}>
+          <Col lg={3}>
             <AppDrawer lists={lists}></AppDrawer>
           </Col>
-          <Col lg={8}>
+          <Col lg={9}>
             <AppContent>
               <Switch>
                 <Route path="/:listId" component={TodoListContainer} />

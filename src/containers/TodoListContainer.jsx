@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useApi from "../hooks/apiHook";
-import { Spinner } from "react-bootstrap";
-import TodoList from "../components/TodoList/index";
+import { Spinner, Container, Row, Col } from "react-bootstrap";
+import TodoList from "../components/TodoList";
 import TodoForm from "../components/TodoForm";
+import TodoDetails from "../components/TodoDetails";
 
 const TodoListContainer = ({ match }) => {
+  const [selectedTodo, setSelectedTodo] = useState(null);
   const {
     data: { lists, todos },
     actions,
@@ -28,10 +30,34 @@ const TodoListContainer = ({ match }) => {
     actions.updateTodo(todoId, data);
   };
 
+  const handleSelect = (todo) => {
+    setSelectedTodo(todo);
+  };
+
   return (
     <div className="todoListContainer">
-      <TodoList todos={todos} list={list} onDelete={handleDelete} onUpdate={handleUpdate} />
-      <TodoForm onSubmit={handleAddTask} />
+      <Container>
+        <Row>
+          <Col lg={8}>
+            <TodoList
+              todos={todos}
+              list={list}
+              onDelete={handleDelete}
+              onUpdate={handleUpdate}
+              onSelect={handleSelect}
+            />
+            <TodoForm onSubmit={handleAddTask} />
+          </Col>
+          <Col lg={4}>
+            {selectedTodo && (
+              <TodoDetails
+                todo={selectedTodo}
+                onClose={() => setSelectedTodo(null)}
+              />
+            )}
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };
