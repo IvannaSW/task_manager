@@ -59,5 +59,5 @@ export const updateTodo = (todoId, data) => {
     .collection("todos")
     .doc(todoId)
     .update(data)
-    .then((res) => console.log(res));
+    .then(() => ({ id: todoId, ...data }));    
 };

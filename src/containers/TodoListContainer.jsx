@@ -1,46 +1,50 @@
-import React, { useEffect, useState } from "react";
-import useApi from "../hooks/apiHook";
+import React, { useEffect, useState, useContext } from "react";
 import { Spinner, Container, Row, Col } from "react-bootstrap";
 import TodoList from "../components/TodoList";
 import TodoForm from "../components/TodoForm";
 import TodoDetails from "../components/TodoDetails";
+import DataContext from "../context/data";
+import { actions } from "../store";
 
 const TodoListContainer = ({ match }) => {
+  const { state, dispatch } = useContext(DataContext);
   const [selectedTodo, setSelectedTodo] = useState(null);
-  const {
-    data: { lists, todos },
-    actions,
-  } = useApi();
   useEffect(() => {
-    actions.getListTodos(match.params.listId);
-  }, [actions, match.params.listId]);
-  const list = lists.find((list) => list.id === match.params.listId);
-  if (!list || !todos) {
-    return <Spinner animation="border" variant="info" className={"spinner"} />;
-  }
-  const handleAddTask = (title) => {
-    actions.createTodo({ title, listId: list.id });
+    if (match.params.listId) {
+      actions.getListTodos(match.params.listId, dispatch);
+    } else {
+      actions.getTodos(dispatch);
+    }
+  }, [dispatch, match.params.listId]);
+
+  const handleAddTask = (title) => {    
+    actions.createTodo({ title, listId: list.id }, dispatch);
   };
 
   const handleDelete = (todoId) => {
-    actions.deleteTodo(todoId);
+    actions.deleteTodo(todoId, dispatch);
   };
 
-  const handleUpdate = (todoId, data) => {
-    actions.updateTodo(todoId, data);
+  const handleUpdate = (todoId, data) => {    
+    actions.updateTodo(todoId, data, dispatch);
   };
 
   const handleSelect = (todo) => {
-    setSelectedTodo(todo);
+    setSelectedTodo(todo, dispatch);
   };
 
+  const list = state.lists.find((list) => list.id === match.params.listId);
+  if (!list || !state.todos) {
+    return <Spinner animation="border" variant="info" className={"spinner"} />;
+  }
+  
   return (
     <div className="todoListContainer">
       <Container>
         <Row>
           <Col lg={8}>
             <TodoList
-              todos={todos}
+              todos={state.todos}
               list={list}
               onDelete={handleDelete}
               onUpdate={handleUpdate}

@@ -5,8 +5,7 @@ import "./TodoForm.css";
 const TodoForm = ({onSubmit}) => {
   const [title, setTitle] = useState('');
 
-  const handleSubmit = (event) => {
-    debugger;
+  const handleSubmit = (event) => {    
       event.preventDefault();
       onSubmit(title);
       setTitle('');
