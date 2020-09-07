@@ -15,7 +15,7 @@ const TodoForm = ({onSubmit}) => {
     <Form onSubmit={handleSubmit} className="add-task-form">
       <Form.Row>
         <Col lg={12}>
-          <Form.Control value={title} onChange={ e=> setTitle(e.target.value)} placeholder="Add new task here..." />
+          <Form.Control value={title} onChange={ e => setTitle(e.target.value)} placeholder="Add new task here..." />
         </Col>
       </Form.Row>
     </Form>

@@ -1,4 +1,8 @@
-import { db } from "./firebase";
+import { db, auth } from "./firebase";
+
+export const onAuth = (handleAuth) => {
+  auth.onAuthStateChanged(handleAuth);
+}
 
 export const getLists = () => {
   return db
@@ -59,5 +63,5 @@ export const updateTodo = (todoId, data) => {
     .collection("todos")
     .doc(todoId)
     .update(data)
-    .then(() => ({ id: todoId, ...data }));    
+    .then(() => ({ id: todoId, ...data }));
 };

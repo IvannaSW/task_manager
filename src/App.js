@@ -7,9 +7,10 @@ import { Switch, Route } from "react-router-dom";
 import TodoListContainer from "./containers/TodoListContainer";
 import { reducer, initialState, actions } from "./store";
 import DataContext from "./context/data";
+import LoginContainer from "../src/containers/LoginContainer";
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);  
 
   const contextValue = useMemo(() => {
     return { state, dispatch };
@@ -17,10 +18,15 @@ function App() {
 
   useEffect(() => {
     actions.getLists(dispatch);
+    actions.setAuth(dispatch);
   }, []);
 
+  if(!state.user) {
+    return <LoginContainer/>
+  }  
+
   return (
-    <DataContext.Provider value={contextValue}>
+    <DataContext.Provider value={contextValue}>     
       <div className="app">
         <Container>
           <Row>
@@ -40,6 +46,7 @@ function App() {
                   <Route exact path="/" component={TodoListContainer} />
                   <Route exact path="/imporant" component={TodoListContainer} />
                   <Route exact path="/planned" component={TodoListContainer} />
+                  <Route exact path="/login" component={LoginContainer} />
                   <Route
                     path="/:listId/:todoId?"
                     component={TodoListContainer}

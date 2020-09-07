@@ -13,6 +13,7 @@ const config = {
 firebase.initializeApp(config);
 
 // Get a reference to the database service
-const db = firebase.firestore();;
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-export {db};
+export {db, auth};

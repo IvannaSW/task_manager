@@ -1,7 +1,18 @@
 import * as api from "../src/api";
+import { auth } from "./firebase";
 
 export function reducer(state, action) {
   switch (action.type) {
+    case "LOGIN_USER":
+      return {
+        ...state,
+        user: action.payload.user,
+      };
+    case "LOGOUT_USER":
+      return {
+        ...state,
+        user: null,
+      };
     case "GET_LISTS":
       return {
         ...state,
@@ -16,21 +27,19 @@ export function reducer(state, action) {
       debugger;
       return {
         ...state,
-        todos: [...state.todos, action.payload.todo]
-        
+        todos: [...state.todos, action.payload.todo],
       };
-    case "UPDATE_TODO":          
+    case "UPDATE_TODO":
       return {
         ...state,
         todos: state.todos.map((todo) => {
-            if (todo.id === action.payload.todo.id){
-                return { ...todo, ...action.payload.todo }
-            }
-            else {
-                return todo;
-            }            
+          if (todo.id === action.payload.todo.id) {
+            return { ...todo, ...action.payload.todo };
+          } else {
+            return todo;
+          }
         }),
-    };
+      };
     case "GET_LIST_TODOS":
       return {
         ...state,
@@ -49,6 +58,16 @@ export function reducer(state, action) {
 export const initialState = {
   lists: [],
   todos: [],
+  user: null,
+};
+
+export const loginUser = (login, password) => {
+  auth
+    .signInWithEmailAndPassword(login, password)
+    .then(() => {
+      console.log("User logged in");
+    })
+    .catch((error) => console.log(error));
 };
 
 export const getLists = (dispatch) => {
@@ -78,12 +97,12 @@ export const getListTodos = (listId, dispatch) => {
   );
 };
 
-export const createTodo = (data, dispatch) => {   
+export const createTodo = (data, dispatch) => {
   return api.createTodo(data).then((todo) =>
     dispatch({
       type: "CREATE_TODO",
       payload: {
-        todo
+        todo,
       },
     })
   );
@@ -100,9 +119,9 @@ export const deleteTodo = (todoId, dispatch) => {
   );
 };
 
-export const updateTodo = (todoId, data, dispatch) => { 
-debugger;     
-  return api.updateTodo(todoId, data).then((todo) =>    
+export const updateTodo = (todoId, data, dispatch) => {
+  debugger;
+  return api.updateTodo(todoId, data).then((todo) =>
     dispatch({
       type: "UPDATE_TODO",
       payload: {
@@ -112,6 +131,23 @@ debugger;
   );
 };
 
+export const setAuth = (dispatch) => {
+  api.onAuth((user) => {
+    if (user) {
+      dispatch({
+        type: "LOGIN_USER",
+        payload: {
+          user,
+        },
+      });
+    } else {
+      dispatch({
+        type: "LOGOUT_USER",
+      });
+    }
+  });
+};
+
 export const actions = {
   getLists,
   getTodos,
@@ -119,4 +155,6 @@ export const actions = {
   updateTodo,
   deleteTodo,
   createTodo,
+  loginUser,
+  setAuth,
 };

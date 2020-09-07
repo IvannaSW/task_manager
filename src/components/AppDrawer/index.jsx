@@ -1,12 +1,15 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./AppDrawer.css";
 import { HouseDoor, Star, Calendar2Event, Folder } from "react-bootstrap-icons";
 import { ListGroup } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import DataContext from '../../context/data';
 
 const AppDrawer = ({ lists }) => {
+  const {state} = useContext(DataContext);
   return (
     <div>
+      <p>{state.user? state.user.email : ''}</p>
       <ListGroup variant="flush">
         {[
           { text: "Home", icon: <HouseDoor />, to: "/" },
