@@ -3,8 +3,7 @@ import React from "react";
 import TodoListItem from "../TodoListItem/index";
 import "./TodoList.css";
 
-const TodoList = ({ todos, list, onDelete, onUpdate, onSelect }) => {
-  console.log(todos);
+const TodoList = ({ todos, list, onDelete, onUpdate, onSelect }) => {  
   return (
     <div>
       <h3 className="list-title">{list.title}</h3>

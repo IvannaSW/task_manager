@@ -1,0 +1,21 @@
+.login-form-container{
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.login-page-title {
+    font-size: 25px;
+    color: #17a2b8;
+    text-align: center;
+}
+
+.login-btn {
+    float: left;
+    width: 100px;
+}
+
+.logout-btn {
+    float: right;
+    width: 100px;
+}

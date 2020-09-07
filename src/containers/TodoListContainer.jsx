@@ -1,36 +1,36 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Spinner, Container, Row, Col } from "react-bootstrap";
 import TodoList from "../components/TodoList";
 import TodoForm from "../components/TodoForm";
 import TodoDetails from "../components/TodoDetails";
-import DataContext from "../context/data";
-import { actions } from "../store";
+import useStore from '../hooks/store';
 
 const TodoListContainer = ({ match }) => {
-  const { state, dispatch } = useContext(DataContext);
+  const { state, actions } = useStore();
   const [selectedTodo, setSelectedTodo] = useState(null);
   useEffect(() => {
+    setSelectedTodo(null);    
     if (match.params.listId) {
-      actions.getListTodos(match.params.listId, dispatch);
+        actions.getListTodos(match.params.listId);
     } else {
-      actions.getTodos(dispatch);
+        actions.getTodos();
     }
-  }, [dispatch, match.params.listId]);
+}, [actions, match.params.listId]);
 
   const handleAddTask = (title) => {    
-    actions.createTodo({ title, listId: list.id }, dispatch);
+    actions.createTodo({ title, listId: list.id });
   };
 
-  const handleDelete = (todoId) => {
-    actions.deleteTodo(todoId, dispatch);
+  const handleDelete = (todoId) => {    
+    actions.deleteTodo(todoId);
   };
 
   const handleUpdate = (todoId, data) => {    
-    actions.updateTodo(todoId, data, dispatch);
+    actions.updateTodo(todoId, data);
   };
 
   const handleSelect = (todo) => {
-    setSelectedTodo(todo, dispatch);
+    setSelectedTodo(todo);
   };
 
   const list = state.lists.find((list) => list.id === match.params.listId);

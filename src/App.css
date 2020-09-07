@@ -1,23 +1,35 @@
 .app {
-    display: flex;
-    flex-direction: row;
-    width: 1024px;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  width: 1024px;
+  margin: 0 auto;
 }
 
 .app-header {
-    height: 50px;
-    padding: 5px;
-    background-color: #17a2b8;    
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+  height: 50px;
+  padding: 5px;
+  background-color: #17a2b8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .header-tagline {
-    font-size: 18px;
-    color: #fff;
-    line-height: 50px;
-    padding-left: 25px;
+  font-size: 18px;
+  color: #fff;
+  line-height: 50px;
+  padding-left: 25px;
 }
-  
+
+.username {
+  font-size: 16px;
+  color: #fff;
+  padding-right: 25px;
+}
+
+.logout-icon {
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+  margin-left: 10px;
+}

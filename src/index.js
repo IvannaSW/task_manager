@@ -6,12 +6,14 @@ import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter as Router } from "react-router-dom";
 
+import { Provider, initialState, reducer, actions } from "./store/";
+
 ReactDOM.render(
-  <Router>
-    <React.StrictMode>
+  <Provider initialState={initialState} reducer={reducer} actions={actions}>
+    <Router>
       <App />
-    </React.StrictMode>
-  </Router>,
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 

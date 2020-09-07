@@ -1,38 +1,39 @@
-import React, { useEffect, useMemo, useReducer } from "react";
+import React, { useEffect } from "react";
 import AppDrawer from "./components/AppDrawer/index";
 import AppContent from "./components/AppContent/index";
 import "./App.css";
 import { Container, Row, Col } from "react-bootstrap";
+import { DoorClosed } from "react-bootstrap-icons";
 import { Switch, Route } from "react-router-dom";
 import TodoListContainer from "./containers/TodoListContainer";
-import { reducer, initialState, actions } from "./store";
-import DataContext from "./context/data";
 import LoginContainer from "../src/containers/LoginContainer";
+import useStore from "./hooks/store";
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);  
-
-  const contextValue = useMemo(() => {
-    return { state, dispatch };
-  }, [state, dispatch]);
+  const { state, actions } = useStore();
 
   useEffect(() => {
-    actions.getLists(dispatch);
-    actions.setAuth(dispatch);
-  }, []);
+    actions.initAuth();
+    actions.getLists();
+  }, [actions]);
 
-  if(!state.user) {
-    return <LoginContainer/>
-  }  
-
-  return (
-    <DataContext.Provider value={contextValue}>     
+  if (!state.user) {
+    return <Route component={LoginContainer} />;
+  } else {
+    return (
       <div className="app">
         <Container>
           <Row>
             <Col>
               <header className="app-header">
                 <div className="header-tagline">Task Manager</div>
+                <div className="username">
+                  {state.user.email}
+                  <DoorClosed
+                    className="logout-icon"
+                    onClick={() => actions.signOutUser()}
+                  />
+                </div>
               </header>
             </Col>
           </Row>
@@ -57,8 +58,8 @@ function App() {
           </Row>
         </Container>
       </div>
-    </DataContext.Provider>
-  );
+    );
+  }
 }
 
 export default App;
