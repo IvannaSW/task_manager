@@ -1,6 +1,6 @@
 import React from "react";
 import { ListGroup, FormCheck } from "react-bootstrap";
-import { Trash } from "react-bootstrap-icons";
+import { Trash, Star, StarFill } from "react-bootstrap-icons";
 import "./TodoListItem.css";
 
 const TodoListItem = ({ todo, onUpdate, onDelete, onSelect }) => {
@@ -20,12 +20,15 @@ const TodoListItem = ({ todo, onUpdate, onDelete, onSelect }) => {
 
         <span onClick={() => onSelect(todo)} className="selected-item">
           {todo.title}
-        </span>
+        </span>       
         <div
           className="delete-button-container"
           onClick={() => onDelete(todo.id)}
         >
           <Trash className="delete-button" />
+        </div>
+        <div onClick={()=> onUpdate(todo.id, {important: !todo.important})} className="important-button-container" >
+          {todo.important ? <StarFill className="important-button" /> : <Star className="important-button" />}
         </div>
       </ListGroup.Item>
     </ListGroup>

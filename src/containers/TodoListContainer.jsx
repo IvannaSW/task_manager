@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Spinner, Container, Row, Col } from "react-bootstrap";
 import TodoList from "../components/TodoList";
 import TodoForm from "../components/TodoForm";
 import TodoDetails from "../components/TodoDetails";
-import useStore from '../hooks/store';
+import useStore from "../hooks/store";
+import SortMenu from "../components/SortMenu";
 
 const TodoListContainer = ({ match }) => {
   const { state, actions } = useStore();
   const [selectedTodo, setSelectedTodo] = useState(null);
-  useEffect(() => {
-    setSelectedTodo(null);    
-    if (match.params.listId) {
-        actions.getListTodos(match.params.listId);
-    } else {
-        actions.getTodos();
-    }
-}, [actions, match.params.listId]);
-
-  const handleAddTask = (title) => {    
-    actions.createTodo({ title, listId: list.id });
+  
+  const handleAddTask = (title) => {
+    actions.createTodo({
+      title,
+      listId: list.id || "",
+      userId: state.user.uid,
+    });    
   };
 
-  const handleDelete = (todoId) => {    
+  const handleDelete = (todoId) => {
     actions.deleteTodo(todoId);
   };
 
-  const handleUpdate = (todoId, data) => {    
+  const handleUpdate = (todoId, data) => {
     actions.updateTodo(todoId, data);
   };
 
@@ -33,18 +30,46 @@ const TodoListContainer = ({ match }) => {
     setSelectedTodo(todo);
   };
 
-  const list = state.lists.find((list) => list.id === match.params.listId);
-  if (!list || !state.todos) {
+  const handleSortChange = (sort) => {
+    actions.updateList(list.id, {sort});
+  }
+
+  const sortFn = {
+    title: (a,b) => a.title.localeCompare(b.title),
+    date: (a,b) => new Date(a.seconds*1000) - new Date(b.seconds*1000),
+    important: (a,b) => b.important - a.important,
+    completed: (a,b) => b.completed - a.completed,
+  }
+
+  const list = state.lists.find((list) => list.id === match.params.listId) || {
+    title: "Tasks",
+  };
+  const path = match.path;
+
+  const getTodosByFilter = ({
+    '/': todos => todos,
+    '/important': todos => todos.filter(todo => todo.important),
+    '/planned': todos => todos.filter(todo => todo.dueDate)
+  });
+
+  const getTodosByList = (listId, todos) => todos.filter(todo => todo.listId === listId);
+
+  const todos = match.params.listId ? getTodosByList(match.params.listId, state.todos): getTodosByFilter[path](state.todos);
+
+  const sortedTodos = list.sort ? todos.slice().sort(sortFn[list.sort]) : todos;
+
+  if (!list || !todos) {
     return <Spinner animation="border" variant="info" className={"spinner"} />;
   }
-  
+
   return (
     <div className="todoListContainer">
-      <Container>
+      <SortMenu onSortChange = {handleSortChange} />     
+      <Container>       
         <Row>
-          <Col lg={8}>
+          <Col lg={8}>            
             <TodoList
-              todos={state.todos}
+              todos={sortedTodos}
               list={list}
               onDelete={handleDelete}
               onUpdate={handleUpdate}
@@ -59,7 +84,7 @@ const TodoListContainer = ({ match }) => {
                 onClose={() => setSelectedTodo(null)}
               />
             )}
-          </Col>
+          </Col>          
         </Row>
       </Container>
     </div>

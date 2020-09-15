@@ -1,9 +1,10 @@
-.delete-button-container {
+.delete-button-container, .important-button-container {
   float: right;
   cursor: pointer;
+  padding-left: 15px;
 }
 
-.delete-button {
+.delete-button, .important-button {
   color: #17a2b8;
   height: 20px;
   width: 20px;

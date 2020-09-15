@@ -19,51 +19,64 @@ export const initAuth = (onAuth) => {
 
 /* DB */
 
-export const getLists = () => {
+export const getLists = (userId) => {
   return db
     .collection("lists")
+    .where("userId", "==", userId)
     .get()
-    .then((snapshot) => {
-      const items = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      return items;
-    })
+    .then(mapSnapshot)
     .catch((error) => {
       console.log("Error getting lists from firebase:", error);
     });
 };
 
-export const getTodos = () => {
-  return db.collection('todos')
-      .where('listId', '==', '')
+export const getTodos = (userId = '') => {
+  return db.collection('todos')      
+      .where("userId", "==", userId)
       .get()
-      .then(snapshot => {
-          const items = snapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data()
-          }));
-          
-          return items;
-      });
+      .then(mapSnapshot);
 }
 
 export const getListTodos = (listId) => {
   return db
     .collection("todos")
-    .where("listId", "==", listId)
+    .where("listId", "==", listId)    
     .get()
-    .then((snapshot) => {
-      const items = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      return items;
-    })
+    .then(mapSnapshot)
     .catch((error) => {
       console.log("Error getting todos from firebase:", error);
     });
+};
+
+export const createList = (data) => {
+  return db
+    .collection("lists")
+    .add({
+      icon: '',
+      sort: '',
+      todos: [],      
+      ...data      
+    })
+    .then((docRef) => {
+      return docRef.get();
+    })
+    .then(mapDoc);
+};
+
+export const deleteList = (listId) => { 
+  return db
+    .collection("lists")
+    .doc(listId)
+    .delete()
+    .then(() => listId);
+};
+
+export const updateList = (listId, data) => {
+  return db
+    .collection("lists")
+    .doc(listId)
+    .update(data)
+    .then(() => ({ id: listId, ...data }));
 };
 
 export const createTodo = (data) => {
@@ -72,11 +85,15 @@ export const createTodo = (data) => {
     .add({
       ...data,
       completed: false,
+      important: false,
+      notes: '',
+      dueDate: null,
+      steps: []
     })
     .then((docRef) => {
       return docRef.get();
     })
-    .then((doc) => ({ id: doc.id, ...doc.data() }));
+    .then(mapDoc);
 };
 
 export const deleteTodo = (todoId) => { 
@@ -94,3 +111,12 @@ export const updateTodo = (todoId, data) => {
     .update(data)
     .then(() => ({ id: todoId, ...data }));
 };
+
+
+const mapSnapshot = (snapshot) => {
+  return snapshot.docs.map(mapDoc);
+}
+
+const mapDoc = (doc) => {
+  return { id: doc.id, ...doc.data()};
+} 

@@ -28,8 +28,8 @@ export const initAuth = () => {
 
 
 /* DB */
-export const getLists = () => {
-    return api.getLists()
+export const getLists = (userId) => {
+    return api.getLists(userId)
         .then(lists => ({
             type: 'GET_LISTS',
             payload: {
@@ -38,8 +38,8 @@ export const getLists = () => {
         }));
 }
 
-export const getTodos = () => {
-    return api.getTodos()
+export const getTodos = (userId) => {
+    return api.getTodos(userId)
         .then(todos => ({
             type: 'GET_TODOS',
             payload: {
@@ -54,6 +54,36 @@ export const getListTodos = (listId) => {
             type: 'GET_LIST_TODOS',
             payload: {
                 todos
+            }
+        }));
+}
+
+export const createList = (data) => {
+    return api.createList(data)
+        .then(list => ({
+            type: 'CREATE_LIST',
+            payload: {
+                list
+            }
+        }));
+}
+
+export const updateList = (listId, data) => {
+    return api.updateList(listId, data)
+        .then(list => ({
+            type: 'UPDATE_LIST',
+            payload: {
+                list
+            }
+        }));
+}
+
+export const deleteList = (listId) => {    
+    return api.deleteList(listId)
+        .then(listId => ({
+            type: 'DELETE_LIST',
+            payload: {
+                listId
             }
         }));
 }

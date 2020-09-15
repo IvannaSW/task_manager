@@ -13,9 +13,15 @@ function App() {
   const { state, actions } = useStore();
 
   useEffect(() => {
-    actions.initAuth();
-    actions.getLists();
+    actions.initAuth();   
   }, [actions]);
+
+  useEffect(() => {
+    if(state.user){
+      actions.getLists(state.user.uid);
+      actions.getTodos(state.user.uid);
+    }    
+  }, [actions, state.user]);
 
   if (!state.user) {
     return <Route component={LoginContainer} />;
@@ -45,7 +51,7 @@ function App() {
               <AppContent>
                 <Switch>
                   <Route exact path="/" component={TodoListContainer} />
-                  <Route exact path="/imporant" component={TodoListContainer} />
+                  <Route exact path="/important" component={TodoListContainer} />
                   <Route exact path="/planned" component={TodoListContainer} />
                   <Route exact path="/login" component={LoginContainer} />
                   <Route

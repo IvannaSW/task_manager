@@ -1,15 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import "./AppDrawer.css";
 import { HouseDoor, Star, Calendar2Event, Folder } from "react-bootstrap-icons";
-import { ListGroup } from "react-bootstrap";
+import { ListGroup, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import useStore from "../../hooks/store";
 
 const AppDrawer = ({ lists }) => {
+  const { state, actions } = useStore();
+  const [isListFormOpen, setListFormOpen] = useState(false);
+  const [listTitle, setListTitle] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    actions
+      .createList({ title: listTitle, userId: state.user.uid })
+      .then(() => {
+        setListTitle("");
+        setListFormOpen(false);
+      });
+  };
   return (
     <div>
       <ListGroup variant="flush">
         {[
-          { text: "Home", icon: <HouseDoor />, to: "/" },
+          { text: "Tasks", icon: <HouseDoor />, to: "/" },
           { text: "Important", icon: <Star />, to: "/important" },
           { text: "Planned", icon: <Calendar2Event />, to: "/planned" },
         ].map((item) => (
@@ -29,6 +43,23 @@ const AppDrawer = ({ lists }) => {
             </NavLink>
           </ListGroup.Item>
         ))}
+        <ListGroup.Item>
+          <div>
+            {isListFormOpen ? (
+              <form onSubmit={handleSubmit}>
+                <input
+                type="text"
+                  value={listTitle}
+                  onChange={(e) => setListTitle(e.target.value)}
+                ></input>
+              </form>
+            ) : (
+              <Button onClick={() => setListFormOpen(true)}>
+                Add new list
+              </Button>
+            )}
+          </div>
+        </ListGroup.Item>
       </ListGroup>
     </div>
   );
