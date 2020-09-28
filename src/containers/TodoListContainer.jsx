@@ -15,11 +15,13 @@ const TodoListContainer = ({ match }) => {
       title,
       listId: list.id || "",
       userId: state.user.uid,
-    });    
+    });
+    if(list.id){actions.updateList(list.id, {todos: ++list.todos})};   
   };
 
   const handleDelete = (todoId) => {
     actions.deleteTodo(todoId);
+    if(list.id){actions.updateList(list.id, {todos: --list.todos})};
   };
 
   const handleUpdate = (todoId, data) => {
@@ -64,7 +66,7 @@ const TodoListContainer = ({ match }) => {
 
   return (
     <div className="todoListContainer">
-      <SortMenu onSortChange = {handleSortChange} />     
+      {list.id && <SortMenu onSortChange = {handleSortChange} />}     
       <Container>       
         <Row>
           <Col lg={8}>            

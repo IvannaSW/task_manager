@@ -11,3 +11,5 @@
 .list-group-item-action :hover {
   color: #17a2b8 !important;
 }
+
+.todo-count{float: right; background-color: #17a2b8; height: 20px; width: 20px; border-radius: 10px; color:#fff; text-align: center; line-height: 20px;}

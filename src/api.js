@@ -54,7 +54,7 @@ export const createList = (data) => {
     .add({
       icon: '',
       sort: '',
-      todos: [],      
+      todos: 0,      
       ...data      
     })
     .then((docRef) => {

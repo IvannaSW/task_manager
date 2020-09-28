@@ -55,9 +55,6 @@ export const reducer = (state, action) => {
                 lists: state.lists.filter((list) => list.id !== action.payload.listId)
             }
 
-
-
-
         case 'CREATE_TODO':
             return {
                 ...state,

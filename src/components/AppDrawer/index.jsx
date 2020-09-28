@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./AppDrawer.css";
 import { HouseDoor, Star, Calendar2Event, Folder } from "react-bootstrap-icons";
-import { ListGroup, Button } from "react-bootstrap";
+import { ListGroup, Button} from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import useStore from "../../hooks/store";
 
@@ -39,7 +39,7 @@ const AppDrawer = ({ lists }) => {
         {lists.map((list) => (
           <ListGroup.Item key={list.id} component={NavLink} to={list.id} action>
             <NavLink className="nav-link" to={list.id}>
-              <Folder /> {list.title}
+              <Folder /> {list.title} <span className="todo-count">{list.todos}</span>
             </NavLink>
           </ListGroup.Item>
         ))}
